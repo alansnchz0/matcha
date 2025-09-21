@@ -1,73 +1,56 @@
-# Image Preprocessing & OCR Extraction
+# Matcha Receipt OCR
 
-This repository provides scripts for:
-1. **Preprocessing images:** Convert images to grayscale and apply binarization (thresholding).
-2. **Extracting text:** Use Tesseract OCR to convert processed images to raw, machine-readable text.
+## Phase 1: Classic OCR Extraction
 
----
+Extract text from receipt images using Tesseract OCR.
 
-## Requirements
+### Usage
 
-- Python 3.7+
-- [OpenCV](https://pypi.org/project/opencv-python/)
-- [pytesseract](https://pypi.org/project/pytesseract/)
-- [Tesseract-OCR](https://github.com/tesseract-ocr/tesseract) (must be installed on your system)
-
-## Installation
-
-1. **Install Python dependencies:**
-   ```
-   pip install opencv-python pytesseract
-   ```
-2. **Install Tesseract-OCR:**
-   - On Ubuntu:  
-     `sudo apt-get install tesseract-ocr`
-   - On Mac (Homebrew):  
-     `brew install tesseract`
-   - On Windows:  
-     Download the [installer here](https://github.com/tesseract-ocr/tesseract/wiki).
+1. **Install dependencies**
+    ```
+    pip install pytesseract opencv-python
+    ```
+2. **Run extraction**
+    ```
+    python extract_text.py <input_images_dir> <output_text_dir>
+    ```
+    - Each image will produce a `.txt` file with the extracted text.
 
 ---
 
-## Phase 1: Image Preprocessing
+## Phase 2 (REVISED): Text & Layout Extraction with Keras-OCR
 
-Convert all images in a directory to grayscale and apply binarization.
+Use deep learning OCR to extract both text and its location from receipts.
 
-**Usage:**
-```sh
-python preprocess_images.py <input_dir> <output_dir> [threshold]
-```
-- `<input_dir>`: Folder with original images.
-- `<output_dir>`: Folder to save processed images.
-- `[threshold]`: (Optional) Binarization threshold (default: 128).
+### Key Concept
 
-**Example:**
-```sh
-python preprocess_images.py ./images ./images_bw 150
-```
+Keras-OCR performs two steps:
+- **Detection:** Finds where the text is.
+- **Recognition:** Reads the text in those locations.
 
----
+The output is a list of `(word, bounding_box_coordinates)` tuples—this location data is invaluable.
 
-## Phase 2: Text Extraction with OCR
+### Usage
 
-Extract raw text from the processed images using Tesseract OCR.
-
-**Usage:**
-```sh
-python extract_text.py <input_images_dir> <output_text_dir>
-```
-- `<input_images_dir>`: Folder with binarized images (from Phase 1).
-- `<output_text_dir>`: Folder to save extracted `.txt` files.
-
-**Example:**
-```sh
-python extract_text.py ./images_bw ./ocr_output
-```
+1. **Install dependencies**
+    ```
+    pip install tensorflow keras-ocr
+    ```
+2. **Run extraction**
+    ```
+    python extract_text_with_layout.py <input_images_dir> <output_text_dir>
+    ```
+    - Each image will yield a `.txt` file. The text is reconstructed in logical reading order based on bounding box positions.
 
 ---
 
-## Notes
+## Files
 
-- The extracted text may contain errors; that's expected and useful for training AI models to improve OCR accuracy.
-- For large batches, ensure enough disk space for output folders.
+- `extract_text.py`: Classic OCR extraction with Tesseract.
+- `extract_text_with_layout.py`: Deep learning-based extraction with Keras-OCR, including reading order reconstruction.
+
 ---
+
+## Example Output
+
+For each receipt image, a `.txt` file is created in the output directory containing the recognized text in logical order.
