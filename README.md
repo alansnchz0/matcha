@@ -18,17 +18,15 @@ Extract text from receipt images using Tesseract OCR.
 
 ---
 
-## Phase 2 (REVISED): Text & Layout Extraction with Keras-OCR
+## Phase 2: Text & Layout Extraction with Keras-OCR
 
-Use deep learning OCR to extract both text and its location from receipts.
+**Objective:** Use a deep learning OCR model to extract text and its coordinates.  
+This phase remains unchanged.
 
-### Key Concept
+### Action
 
-Keras-OCR performs two steps:
-- **Detection:** Finds where the text is.
-- **Recognition:** Reads the text in those locations.
-
-The output is a list of `(word, bounding_box_coordinates)` tuples—this location data is invaluable.
+1. Use the `keras-ocr` pipeline to get a list of `(word, bounding_box)` tuples for each receipt.
+2. Write a helper function to sort these tuples by their coordinates, reconstructing a logically ordered text string for each receipt. Save these as `.txt` files.
 
 ### Usage
 
