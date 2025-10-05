@@ -1,0 +1,10 @@
+# Python dependencies for Matcha Receipt OCR
+# Note: You must also install the Tesseract OCR engine at the system level.
+# On Debian/Ubuntu: sudo apt-get update && sudo apt-get install -y tesseract-ocr libgl1
+
+numpy
+opencv-python
+pytesseract
+# TensorFlow provides the backend for keras-ocr. CPU build by default.
+tensorflow>=2.10,<3.0
+keras-ocr
